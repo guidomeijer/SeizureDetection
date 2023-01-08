@@ -6,6 +6,7 @@ Created on Thu Dec 29 16:05:19 2022 by Guido Meijer
 import json
 import numpy as np
 import pandas as pd
+from scipy.stats import binned_statistic
 from os.path import join, dirname, realpath, isfile
 
 
@@ -26,4 +27,22 @@ def paths():
     paths['repo_path'] = dirname(realpath(__file__))
     return paths
 
+
+def bin_data(data, binsize=60, method=np.mean):
+    """
+    binsize is in seconds
+    """
+    binned_data = pd.DataFrame()
+    time_ax = np.array(data['utc_timestamp'] - data.loc[0, 'utc_timestamp'])
+    bins = np.arange(0, time_ax[-1] + binsize, binsize)
+    for i, variable in enumerate(data.columns[1:]):
+        binned_data[variable] = binned_statistic(time_ax, data[variable],
+                                                 bins=bins,
+                                                 statistic=method)[0]
+    binned_data['bin_centers'] = bins[:-1] + (np.diff(bins) / 2)
+    return binned_data
+
+
+def rms(y):
+    return np.sqrt(np.mean(y**2))
 

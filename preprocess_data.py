@@ -50,4 +50,7 @@ for i, filepath in enumerate(train_labels.loc[neg_ind, 'filepath']):
     train_data['hr_change'] = data_snippet['hr'].max() - data_snippet['hr'].min()
     train_data['acc_rms'] = rms(data_snippet['acc_mag']) 
     train_data['bvp_rms'] = rms(data_snippet['bvp']) 
-    train_data['label'] = 1
+    train_data['label'] = 0
+    
+# Save preprocessed data
+train_data.to_csv(join(path_dict['repo_path'], 'preprocessed_data', 'test.csv'))

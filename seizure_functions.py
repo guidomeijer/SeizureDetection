@@ -7,10 +7,11 @@ import json
 import numpy as np
 import pandas as pd
 from scipy.stats import binned_statistic
+from typing import Dict
 from os.path import join, dirname, realpath, isfile
 
 
-def paths():
+def paths() -> Dict[str, str]:
     """
     Load in figure path from paths.json, if this file does not exist it will be generated from
     user input
@@ -46,3 +47,6 @@ def bin_data(data, binsize=60, method=np.mean):
 def rms(y):
     return np.sqrt(np.mean(y**2))
 
+if __name__ == "__main__":
+    pathss = paths()
+    print(pathss)

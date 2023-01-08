@@ -28,26 +28,29 @@ for i, filepath in enumerate(train_labels.loc[seizure_ind, 'filepath']):
     
     # Plot data 
     time_ax = np.array(data_snippet['utc_timestamp'] - data_snippet.loc[0, 'utc_timestamp']) / 60
-    f, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(10, 2), dpi=200)
+    f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(10, 5))
     
     ax1.plot(time_ax, data_snippet['acc_mag'])
     ax1.set(ylabel='Accelerometer mag.', xlabel='Time (min)')
     
-    ax2.plot(time_ax, data_snippet['acc_mag'])
+    ax2.plot(time_ax, data_snippet['bvp'])
     ax2.set(ylabel='Blood volume pulse', xlabel='Time (min)')
     
     ax3.plot(time_ax, data_snippet['eda'])
     ax3.set(ylabel='Electrodermal act.', xlabel='Time (min)')
     
-    ax4.plot(time_ax, data_snippet['eda'])
+    ax4.plot(time_ax, data_snippet['hr'])
     ax4.set(ylabel='Heart rate', xlabel='Time (min)')
     
     ax5.plot(time_ax, data_snippet['temp'])
     ax5.set(ylabel='Temperature', xlabel='Time (min)')
     
+    ax6.axis('off')
+    
     f.suptitle(f'{filepath}')
     plt.tight_layout()
-    plt.savefig(join(path_dict['fig_path'], 'Raw', 'Seizure', filepath[9:-8] + '.jpg'))
+    plt.savefig(join(path_dict['fig_path'], 'Raw', 'Seizure',
+                     filepath[:-8].replace('/', '_') + '.jpg'), dpi=300)
     plt.close(f)
     
 # Control training data samples
@@ -61,18 +64,18 @@ for i, filepath in enumerate(train_labels.loc[control_ind, 'filepath']):
     
     # Plot data 
     time_ax = np.array(data_snippet['utc_timestamp'] - data_snippet.loc[0, 'utc_timestamp']) / 60
-    f, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(10, 2), dpi=200)
+    f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(10, 5), dpi=200)
     
     ax1.plot(time_ax, data_snippet['acc_mag'])
     ax1.set(ylabel='Accelerometer mag.', xlabel='Time (min)')
     
-    ax2.plot(time_ax, data_snippet['acc_mag'])
+    ax2.plot(time_ax, data_snippet['bvp'])
     ax2.set(ylabel='Blood volume pulse', xlabel='Time (min)')
     
     ax3.plot(time_ax, data_snippet['eda'])
     ax3.set(ylabel='Electrodermal act.', xlabel='Time (min)')
     
-    ax4.plot(time_ax, data_snippet['eda'])
+    ax4.plot(time_ax, data_snippet['hr'])
     ax4.set(ylabel='Heart rate', xlabel='Time (min)')
     
     ax5.plot(time_ax, data_snippet['temp'])
@@ -80,7 +83,8 @@ for i, filepath in enumerate(train_labels.loc[control_ind, 'filepath']):
     
     f.suptitle(f'{filepath}')
     plt.tight_layout()
-    plt.savefig(join(path_dict['fig_path'], 'Raw', 'Control', filepath[9:-8] + '.jpg'))
+    plt.savefig(join(path_dict['fig_path'], 'Raw', 'Control', 
+                     filepath[:-8].replace('/', '_') + '.jpg'))
     plt.close(f)
     
     

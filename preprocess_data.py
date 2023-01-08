@@ -31,11 +31,15 @@ for i, filepath in enumerate(train_labels.loc[pos_ind, 'filepath']):
     data_snippet = pd.read_parquet(join(path_dict['data_path'], 'train', filepath))
 
     # Extract summary data
-    train_data['temp_change'] = data_snippet['temp'].max() - data_snippet['temp'].min()
-    train_data['hr_change'] = data_snippet['hr'].max() - data_snippet['hr'].min()
-    train_data['acc_rms'] = rms(data_snippet['acc_mag']) 
-    train_data['bvp_rms'] = rms(data_snippet['bvp']) 
-    train_data['label'] = 1
+    temp_change = data_snippet['temp'].max() - data_snippet['temp'].min()
+    hr_change = data_snippet['hr'].max() - data_snippet['hr'].min()
+    acc_rms = rms(data_snippet['acc_mag'])
+    bvp_rms = rms(data_snippet['bvp']) 
+    
+    # Add to dataframe
+    train_data = pd.concat((train_data, pd.DataFrame(index=[train_data.shape[0]+1], data={
+        'temp_change': temp_change, 'hr_change': hr_change, 'acc_rms': acc_rms,
+        'bvp_rms': bvp_rms, 'label': 1})))
     
 # Negative training data
 for i, filepath in enumerate(train_labels.loc[neg_ind, 'filepath']):
@@ -46,11 +50,15 @@ for i, filepath in enumerate(train_labels.loc[neg_ind, 'filepath']):
     data_snippet = pd.read_parquet(join(path_dict['data_path'], 'train', filepath))
 
     # Extract summary data
-    train_data['temp_change'] = data_snippet['temp'].max() - data_snippet['temp'].min()
-    train_data['hr_change'] = data_snippet['hr'].max() - data_snippet['hr'].min()
-    train_data['acc_rms'] = rms(data_snippet['acc_mag']) 
-    train_data['bvp_rms'] = rms(data_snippet['bvp']) 
-    train_data['label'] = 0
+    temp_change = data_snippet['temp'].max() - data_snippet['temp'].min()
+    hr_change = data_snippet['hr'].max() - data_snippet['hr'].min()
+    acc_rms = rms(data_snippet['acc_mag'])
+    bvp_rms = rms(data_snippet['bvp']) 
+    
+    # Add to dataframe
+    train_data = pd.concat((train_data, pd.DataFrame(index=[train_data.shape[0]+1], data={
+        'temp_change': temp_change, 'hr_change': hr_change, 'acc_rms': acc_rms,
+        'bvp_rms': bvp_rms, 'label': 0})))
     
 # Save preprocessed data
 train_data.to_csv(join(path_dict['repo_path'], 'preprocessed_data', 'test.csv'))

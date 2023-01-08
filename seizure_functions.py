@@ -26,3 +26,4 @@ def paths():
     paths['repo_path'] = dirname(realpath(__file__))
     return paths
 
+

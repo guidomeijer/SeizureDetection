@@ -34,7 +34,7 @@ def build_cnn_model(activation, input_shape):
     
     # 3 Full connected layers
     model.add(Dense(128, activation=activation, kernel_initializer="he_normal"))
-    model.add(Dense(54, activation=activation, kernel_initializer="he_normal"))
+    model.add(Dense(64, activation=activation, kernel_initializer="he_normal"))
     model.add(Dense(2, activation='softmax')) # 2 classes
     
     # summarize the model
@@ -100,3 +100,6 @@ y_pred = np.argmax(y_prob, axis=1)
 
 accuracy = metrics.accuracy_score(y_test, y_pred)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
+
+auroc = metrics.roc_auc_score(y_test, y_prob[:, 1])
+print("Area under ROC curve: %.2f" % (auroc))

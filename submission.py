@@ -3,7 +3,7 @@ This is the main script that will create the predictions on input data and save 
 """
 import os
 from pathlib import Path
-from .submission_functions import predict_seizure
+from submission_functions import predict_seizure
 
 import numpy as np
 import pandas as pd

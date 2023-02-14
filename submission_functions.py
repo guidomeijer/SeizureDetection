@@ -53,7 +53,7 @@ def bin_data(data: pd.DataFrame, binsize=256, overlap=0.5, method=np.mean) -> pd
     return binned_data
 
 
-def predict_seizure(data_snippet: pd.Dataframe) -> float:
+def predict_seizure(data_snippet: pd.DataFrame) -> float:
     # Downsample data
     binned_data = bin_data(data_snippet, binsize=256, overlap=0.25)
 

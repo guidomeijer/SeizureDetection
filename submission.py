@@ -3,6 +3,7 @@ This is the main script that will create the predictions on input data and save 
 """
 import os
 from pathlib import Path
+from .submission_functions import predict_seizure
 
 import numpy as np
 import pandas as pd
@@ -46,7 +47,8 @@ for i in range(n_files):
         # YOUR MAGIC SAUCE HERE
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         # Feed the input to some machine learning model, and get a prediction.
-        prediction = np.random.rand()
+        prediction = predict_seizure(X)
+        # prediction = np.random.rand()
 
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     except Exception as err:

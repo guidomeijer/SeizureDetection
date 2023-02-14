@@ -68,7 +68,8 @@ WORKDIR /app
 # COPY WHATEVER OTHER SCRIPTS YOU MAY NEED
 # COPY file1 file2 file3 destination_dir
 COPY submission.py ./
-COPY train_CNN_PCA.py ./
+COPY seizure_detection_xgb.model ./
+COPY submission_functions.py ./
 
 # RUN WHATEVER OTHER COMMANDS YOU MAY NEED TO SET UP THE SYSTEM
 # RUN mycommand1 &&\

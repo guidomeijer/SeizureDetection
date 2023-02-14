@@ -13,7 +13,7 @@ from seizure_functions import paths, rms, bin_data
 
 # Settings
 N_SCALES = 64
-N_TIMES_NEG = 4
+N_TIMES_NEG = 1.5
 WAVELET_DICT = dict({'acc_x': 'mexh', 'acc_y': 'mexh', 'acc_z': 'mexh', 'acc_mag': 'mexh',
                      'bvp': 'morl', 'eda': 'mexh', 'hr': 'mexh', 'temp': 'mexh'})
 pca = PCA(n_components = 1)
@@ -68,5 +68,5 @@ for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
             train_data[i, :, j] =  np.nan
         
 # Save result
-np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet_PCA.npy'), train_data)
-np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'), train_y)
+#np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet_PCA.npy'), train_data)
+#np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'), train_y)

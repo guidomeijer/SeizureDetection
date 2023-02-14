@@ -64,7 +64,7 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
             binned_data[var], np.arange(1, N_SCALES + 1), WAVELET_DICT[var]
         )
         if np.any(np.isnan(coeffs)):
-            this_X.append(np.nan)
+            this_X.append([np.nan])
         else:
             this_X.append(pca.fit_transform(coeffs).flatten())
     X = np.concatenate(this_X)

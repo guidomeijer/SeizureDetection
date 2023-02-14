@@ -17,3 +17,4 @@ torchvision==0.13.1
 pyarrow==10.0.1
 PyWavelets==1.4.1
 scikit-image==0.19.3
+xgboost==1.7.3

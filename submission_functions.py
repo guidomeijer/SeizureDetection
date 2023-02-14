@@ -67,8 +67,8 @@ def predict_seizure(data_snippet: pd.Dataframe) -> float:
     X = np.concatenate(this_X)
 
     # Load in model
-    trained_xgb_model = xgb.Booster({"nthread": 4})  # init model
-    trained_xgb_model.load_model(XBG_MODEL)  # load data
+    trained_xgb_model = xgb.XGBClassifier()  
+    trained_xgb_model.load_model(XBG_MODEL)  
 
     # Predict seizure
     prob = trained_xgb_model.predict_proba([X])[0][1]

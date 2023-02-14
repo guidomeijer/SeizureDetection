@@ -8,6 +8,7 @@ Created on Tue Feb 14 19:37:42 2023
 
 import numpy as np
 import pandas as pd
+from datetime import datetime
 import pywt
 import xgboost as xgb
 from sklearn.decomposition import PCA
@@ -61,9 +62,9 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
     this_X = []
     for j, var in enumerate(binned_data.columns[:-1]):
         
-        # If it's all NaNs skip
+        # If this predictor is completely missing, fill with NaNs
         if np.sum(np.isnan(binned_data[var])) == binned_data[var].shape[0]:
-            this_X.append([np.nan])
+            this_X.append([np.nan] * N_SCALES)
             continue
         
         # Do wavelet transform
@@ -76,24 +77,19 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
         
         # Add to list
         this_X.append(pca_transform)
+
+    # Add time of day (in hours)
+    this_X.append([datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).hour
+                   + (datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).minute / 60)])
         
     # Make list into array
     X = np.concatenate(this_X)
-
-    # Remove NaNs
-    X = X[~np.isnan(X)]
-
-    # If all NaN just output a 0
-    if len(X) == 0:
-        prob = 0
-        
-    else:
-
-        # Load in model
-        trained_xgb_model = xgb.XGBClassifier()  
-        trained_xgb_model.load_model(XBG_MODEL)  
     
-        # Predict seizure
-        prob = trained_xgb_model.predict_proba([X])[0][1]
+    # Load in model
+    trained_xgb_model = xgb.XGBClassifier()  
+    trained_xgb_model.load_model(XBG_MODEL)  
+
+    # Predict seizure
+    prob = trained_xgb_model.predict_proba([X])[0][1]
 
     return prob

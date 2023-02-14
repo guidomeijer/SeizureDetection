@@ -33,15 +33,6 @@ def build_and_fit_xgb_model(X_train, y_train, X_test, y_test, n_depth, subsample
 train_data = np.load(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet_PCA.npy'))
 y = np.load(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'))
 
-# Remove NaN data
-nan_data = np.array([False] * train_data.shape[0])
-for i in range(train_data.shape[0]):
-    nan_data[i] = np.isnan(train_data[i, :, :]).any()
-train_data = train_data[~nan_data, :, :]
-y = y[~nan_data]
-
-# Reshape to 2D
-train_data = np.reshape(train_data, (train_data.shape[0], train_data.shape[1]*train_data.shape[2]))
 
 # Select 90% to train and 10% to test
 X_train, X_test, y_train, y_test = train_test_split(train_data, y,

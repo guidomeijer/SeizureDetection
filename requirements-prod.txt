@@ -1,0 +1,23 @@
+# Python version 3.8.15
+
+numpy==1.23.2
+pandas==1.4.0
+scipy==1.9.0
+
+scikit-learn==1.1.2
+scikit-image==0.19.3
+
+PyWavelets==1.4.1
+xgboost==1.7.3
+
+# Loading parquet files
+pyarrow==10.0.1
+fastparquet
+
+# TENSORFLOW VERSION KNOWN TO BE COMPATIBLE WITH THE CUDA DRIVERS ON THE SERVERS
+# tensorflow==2.9.1
+
+# PYTORCH VERSION KNOWN TO BE COMPATIBLE WITH THE CUDA DRIVERS ON THE SERVERS
+# torch==1.12.1
+# torchaudio==0.12.1
+# torchvision==0.13.1

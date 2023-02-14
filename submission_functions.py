@@ -60,18 +60,29 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
     # Preprocess data
     this_X = []
     for j, var in enumerate(binned_data.columns[:-1]):
-        coeffs, freqs = pywt.cwt(
-            binned_data[var], np.arange(1, N_SCALES + 1), WAVELET_DICT[var]
-        )
-        if np.any(np.isnan(coeffs)):
+        
+        # If it's all NaNs skip
+        if np.sum(np.isnan(binned_data[var])) == binned_data[var].shape[0]:
             this_X.append([np.nan])
-        else:
-            this_X.append(pca.fit_transform(coeffs).flatten())
+            continue
+        
+        # Do wavelet transform
+        coeffs, freqs = pywt.cwt(
+            binned_data[var][~np.isnan(binned_data[var])], np.arange(1, N_SCALES + 1), WAVELET_DICT[var]
+        )
+        
+        # Do PCA on transform
+        pca_transform = pca.fit_transform(coeffs).flatten()
+        
+        # Add to list
+        this_X.append(pca_transform)
+        
+    # Make list into array
     X = np.concatenate(this_X)
-    
+
     # Remove NaNs
     X = X[~np.isnan(X)]
-    
+
     # If all NaN just output a 0
     if len(X) == 0:
         prob = 0

@@ -47,18 +47,18 @@ def predict_seizure(data_snippet):
     # Downsample data
     binned_data = bin_data(data_snippet, binsize=256, overlap=0.25)
        
-    # Preprocess data
+    # Preprocess data (wavelet transform plus PCA)
     this_X = []
     for j, var in enumerate(binned_data.columns[:-1]):
         coeffs, freqs = pywt.cwt(binned_data[var], np.arange(1, N_SCALES+1), WAVELET_DICT[var])
         this_X.append(pca.fit_transform(coeffs).flatten())
     X = np.concatenate(this_X)
     
-    # Load in model
-    trained_xgb_model = xgb.Booster({'nthread': 4})  # init model
-    trained_xgb_model.load_model('seizure_detection_xgb.model')  # load data
+    # Load in trained model
+    trained_xgb_model = xgb.XGBClassifier()  
+    trained_xgb_model.load_model('seizure_detection_xgb.model')  
     
-    # Predict seizure
+    # Get probability of seizure
     prob = trained_xgb_model.predict_proba([X])[0][1]
     
     return prob

@@ -63,14 +63,25 @@ def predict_seizure(data_snippet: pd.Dataframe) -> float:
         coeffs, freqs = pywt.cwt(
             binned_data[var], np.arange(1, N_SCALES + 1), WAVELET_DICT[var]
         )
-        this_X.append(pca.fit_transform(coeffs).flatten())
+        pca_transform = pca.fit_transform(coeffs).flatten()
+        if np.any(np.isnan(pca_transform)):
+            this_X.append(np.nan)
     X = np.concatenate(this_X)
+    
+    # Remove NaNs
+    X = X[~np.isnan(X)]
+    
+    # If all NaN just output a 0
+    if len(X) == 0:
+        prob = 0
+        
+    else:
 
-    # Load in model
-    trained_xgb_model = xgb.XGBClassifier()  
-    trained_xgb_model.load_model(XBG_MODEL)  
-
-    # Predict seizure
-    prob = trained_xgb_model.predict_proba([X])[0][1]
+        # Load in model
+        trained_xgb_model = xgb.XGBClassifier()  
+        trained_xgb_model.load_model(XBG_MODEL)  
+    
+        # Predict seizure
+        prob = trained_xgb_model.predict_proba([X])[0][1]
 
     return prob

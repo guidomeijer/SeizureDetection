@@ -63,9 +63,10 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
         coeffs, freqs = pywt.cwt(
             binned_data[var], np.arange(1, N_SCALES + 1), WAVELET_DICT[var]
         )
-        pca_transform = pca.fit_transform(coeffs).flatten()
-        if np.any(np.isnan(pca_transform)):
+        if np.any(np.isnan(coeffs)):
             this_X.append(np.nan)
+        else:
+            this_X.append(pca.fit_transform(coeffs).flatten())
     X = np.concatenate(this_X)
     
     # Remove NaNs

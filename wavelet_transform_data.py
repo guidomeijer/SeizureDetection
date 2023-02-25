@@ -11,7 +11,7 @@ from skimage.transform import resize
 from seizure_functions import paths, rms, bin_data
 
 # Settings
-N_SCALES = 64
+N_SCALES = 128
 WAVELET_DICT = dict({'acc_x': 'mexh', 'acc_y': 'mexh', 'acc_z': 'mexh', 'acc_mag': 'mexh',
                      'bvp': 'morl', 'eda': 'mexh', 'hr': 'mexh', 'temp': 'mexh'})
 
@@ -41,18 +41,17 @@ for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
                                    engine='pyarrow')
     
     # Downsample data
-    binned_data = bin_data(data_snippet, binsize=256, overlap=0.25)
+    binned_data = bin_data(data_snippet, binsize=128)
     
     # Pre-allocate array
     X_cwt = np.ndarray(shape=(binned_data.shape[0], N_SCALES, N_SCALES, binned_data.shape[1]),
                        dtype='float32')
-    
-    for j, var in enumerate(binned_data.columns[:-1]):
+    for j, var in enumerate(binned_data.columns[1:]):
         coeffs, freqs = pywt.cwt(binned_data[var], np.arange(1, N_SCALES+1),
                                  wavelet=WAVELET_DICT[var])
         rescale_coeffs = resize(coeffs, (N_SCALES, N_SCALES), mode='constant')
-        train_data[i, :, :, j] = rescale_coeffs
-        
+        train_data[i, :, :, j] = rescale_coeffs\
+    
 # Save result
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet.npy'), train_data)
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_y.npy'), train_y)

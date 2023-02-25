@@ -29,7 +29,7 @@ for i, filepath in enumerate(train_labels.loc[pos_ind, 'filepath']):
     
     # Load in data snippet
     data_snippet = pd.read_parquet(join(path_dict['data_path'], 'train', filepath))
-
+    
     # Extract summary data
     temp_change = data_snippet['temp'].max() - data_snippet['temp'].min()
     hr_change = data_snippet['hr'].max() - data_snippet['hr'].min()

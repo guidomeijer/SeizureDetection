@@ -47,7 +47,7 @@ def predict_seizure(data_snippet: pd.DataFrame) -> float:
 
     # Preprocess data
     this_X = []
-    for j, var in enumerate(binned_data.columns[:-1]):
+    for j, var in enumerate(binned_data.columns[1:]):
         
         # If this predictor is completely missing, fill with NaNs
         if np.sum(np.isnan(binned_data[var])) == binned_data[var].shape[0]:

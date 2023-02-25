@@ -16,7 +16,7 @@ train_labels = pd.read_csv(join(path_dict['data_path'], 'train', 'train_labels.c
 
 # Get random labels for negative class such that we have 5 consecutive data snippets 
 neg_ind = np.random.choice(train_labels[train_labels['label'] == 0].index,
-                           size=int(np.sum(train_labels['label'] == 1) / 5),
+                           size=int((np.sum(train_labels['label'] == 1) / 5) * 3),
                            replace=False)
 neg_ind = np.concatenate([np.arange(i, i+5) for i in neg_ind])
 pos_ind = train_labels[train_labels['label'] == 1].index  # index to positive data

@@ -29,26 +29,13 @@ def paths() -> Dict[str, str]:
     return paths
 
 
-def bin_data(data, binsize=256, overlap=0.5, method=np.mean):
-    """
-    binsize is in seconds
-    """
-    bin_centers = np.arange(binsize/2, data.shape[0], binsize).astype(int)
-    binsize_act = binsize + int(binsize * overlap)  # actual binsize including overlap
+def bin_data(data: pd.DataFrame, binsize=128) -> pd.DataFrame:
     
     binned_data = pd.DataFrame()
     for i, variable in enumerate(data.columns[1:]):
-        these_data = np.empty(bin_centers.shape)
-        for b, bin_center in enumerate(bin_centers):
-            bin_start = bin_center - int(binsize_act/2)
-            bin_end = bin_center + int(binsize_act/2)
-            if bin_start < 0:
-                bin_start = 0
-            if bin_end > data.shape[0]:
-                bin_end = data.shape[0]
-            these_data[b] = method(data[variable][bin_start:bin_end])
-        binned_data[variable] = these_data
-    binned_data['bin_centers'] = bin_centers
+        this_array = np.array(data[variable])
+        end = binsize * int(this_array.shape[0]/binsize)
+        binned_data[variable] = np.mean(this_array[:end].reshape(-1, binsize), 1)
     return binned_data
 
 

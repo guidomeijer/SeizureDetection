@@ -47,7 +47,7 @@ pos_ind = train_labels[train_labels['label'] == 1].index  # index to positive da
 train_ind = np.concatenate((pos_ind, neg_ind))
 train_y = np.concatenate((np.ones(pos_ind.shape), np.zeros(neg_ind.shape)))
 
-train_data = np.ndarray(shape=(train_ind.shape[0], (N_SCALES * len(WAVELET_DICT)) + 1),
+train_data = np.ndarray(shape=(train_ind.shape[0], (N_SCALES * (len(WAVELET_DICT)-1)) + 1),
                         dtype='float32')
 for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
     if np.mod(i, 100) == 0:
@@ -58,11 +58,11 @@ for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
                                    engine='pyarrow')
     
     # Downsample data
-    binned_data = bin_data(data_snippet, binsize=256, overlap=0.25)
+    binned_data = bin_data(data_snippet, binsize=128)
         
     # Preprocess data
     this_X = []
-    for j, var in enumerate(binned_data.columns[:-1]):
+    for j, var in enumerate(binned_data.columns[1:]):
         
         # If this predictor is completely missing, fill with NaNs
         if np.sum(np.isnan(binned_data[var])) == binned_data[var].shape[0]:
@@ -86,7 +86,7 @@ for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
     # Add time of day (in hours)
     train_data[i, -1] = (datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).hour
                          + (datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).minute / 60))
-               
+    
 # Save result
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet_PCA.npy'), train_data)
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'), train_y)

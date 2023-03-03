@@ -36,13 +36,13 @@ y = np.load(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'))
 
 # Select 90% to train and 10% to test
 X_train, X_test, y_train, y_test = train_test_split(train_data, y,
-                                                    test_size=0.1,
+                                                    test_size=0.2,
                                                     shuffle=True,
                                                     random_state=42)
 
 # define and train model    
 trained_xgb_model, xgb_history = build_and_fit_xgb_model(X_train, y_train, X_test, y_test,
-                                                         5, 0.5, 300)
+                                                         10, 0.5, 300)
 
 # make predictions for test data
 y_pred = trained_xgb_model.predict(X_test)

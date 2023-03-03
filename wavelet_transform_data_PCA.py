@@ -86,7 +86,7 @@ for i, filepath in enumerate(train_labels.loc[train_ind, 'filepath']):
     # Add time of day (in hours)
     train_data[i, -1] = (datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).hour
                          + (datetime.fromtimestamp(data_snippet['utc_timestamp'][0]).minute / 60))
-    
+    asd
 # Save result
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_wavelet_PCA.npy'), train_data)
 np.save(join(path_dict['data_path'], 'preprocessed_data', 'data_y_PCA.npy'), train_y)

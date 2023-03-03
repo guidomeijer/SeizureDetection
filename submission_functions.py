@@ -31,7 +31,7 @@ WAVELET_DICT = dict(
 pca = PCA(n_components=1)
 
 
-def bin_data(data: pd.DataFrame, binsize=128) -> pd.DataFrame:
+def bin_data(data: pd.DataFrame, binsize=256) -> pd.DataFrame:
     
     binned_data = pd.DataFrame()
     for i, variable in enumerate(data.columns[1:]):
@@ -43,11 +43,11 @@ def bin_data(data: pd.DataFrame, binsize=128) -> pd.DataFrame:
 
 def predict_seizure(data_snippet: pd.DataFrame) -> float:
     # Downsample data
-    binned_data = bin_data(data_snippet, binsize=128)
+    binned_data = bin_data(data_snippet, binsize=256)
 
     # Preprocess data
     this_X = []
-    for j, var in enumerate(binned_data.columns[1:]):
+    for j, var in enumerate(binned_data.columns):
         
         # If this predictor is completely missing, fill with NaNs
         if np.sum(np.isnan(binned_data[var])) == binned_data[var].shape[0]:

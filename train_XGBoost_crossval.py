@@ -42,7 +42,7 @@ X_train, X_test, y_train, y_test = train_test_split(train_data, y,
 
 # define and train model    
 trained_xgb_model, xgb_history = build_and_fit_xgb_model(X_train, y_train, X_test, y_test,
-                                                         10, 0.5, 300)
+                                                         5, 0.5, 300)
 
 # make predictions for test data
 y_pred = trained_xgb_model.predict(X_test)
